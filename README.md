@@ -8,4 +8,4 @@ Created with React, TypeScript, & Vite.
 
 ## Introduction
 
-Building my take on a typing speed test, for fun, and also to learn about Svelte.
+Building my take on a typing speed test.
