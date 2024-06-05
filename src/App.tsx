@@ -21,7 +21,7 @@ function App() {
 
       <div>
         <SampleText clearInput={clearInput} />
-        <InputBox inputText={inputText} setInputText={setInputText} clearInput={clearInput} />
+        <InputBox inputText={inputText} handleKeypress={(e) => setInputText(e.target.value)} clearInput={clearInput} />
       </div>
     </div>
   )

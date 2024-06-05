@@ -1,8 +1,12 @@
-export default function InputBox ({ inputText, setInputText, clearInput }: { inputText: string, setInputText: (string: string) => void, clearInput: () => void }) {
-  const handleKeypress = (e: any) => {
-    setInputText(e.target.value);
-  }
+import { ChangeEvent } from "react";
 
+type InputBoxProps = {
+  inputText: string;
+  handleKeypress: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  clearInput: () => void;
+}
+
+export default function InputBox ({ inputText, handleKeypress, clearInput }: InputBoxProps) {
   return (
     <section className="input-section" title="input-section">
       <form className="input-box">
