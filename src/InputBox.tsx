@@ -1,27 +1,25 @@
 import { ChangeEvent } from "react";
-import Timer from "./assets/Timer";
 
 type InputBoxProps = {
   inputText: string;
   isTestInProgress: boolean;
   handleKeypress: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  clearInput: () => void;
+  resetTest: () => void;
 };
 
 export default function InputBox({
   inputText,
   isTestInProgress,
   handleKeypress,
-  clearInput,
+  resetTest,
 }: InputBoxProps) {
   return (
     <section className="input-section" title="input-section">
       <form className="input-box">
         <div className="input-box-header">
           <label htmlFor="type-here">Type to begin:</label>
-          {isTestInProgress && <Timer />}
           {isTestInProgress && (
-            <button id="reset" onClick={clearInput}>
+            <button id="reset" onClick={resetTest}>
               Reset
             </button>
           )}
