@@ -11,7 +11,7 @@ function App() {
   };
 
   return (
-    <>
+    <div className="content">
       <header>
         <hr />
         <h1 className="title">tip tap</h1>
@@ -19,11 +19,11 @@ function App() {
         <p>Welcome to <i>tip tap</i>, a typing test!</p>
       </header>
 
-      <section className="content">
+      <div>
         <SampleText clearInput={clearInput} />
-        <InputBox inputText={inputText} setInputText={setInputText} />
-      </section>
-    </>
+        <InputBox inputText={inputText} setInputText={setInputText} clearInput={clearInput} />
+      </div>
+    </div>
   )
 }
 
