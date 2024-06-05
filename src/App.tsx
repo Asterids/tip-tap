@@ -5,9 +5,11 @@ import { useState } from 'react'
 
 function App() {
   const [inputText, setInputText] = useState<string>('');
+  const [isTestInProgress, setIsTestInProgress] = useState<boolean>(false);
 
   const clearInput = () => {
     setInputText('');
+    setIsTestInProgress(false);
   };
 
   return (
@@ -21,7 +23,7 @@ function App() {
 
       <div>
         <SampleText clearInput={clearInput} />
-        <InputBox inputText={inputText} handleKeypress={(e) => setInputText(e.target.value)} clearInput={clearInput} />
+        <InputBox inputText={inputText} isTestInProgress={isTestInProgress} handleKeypress={(e) => setInputText(e.target.value)} clearInput={clearInput} />
       </div>
     </div>
   )
