@@ -59,75 +59,47 @@ export default function SampleText({
     generateSampleText();
   }, []);
 
+  const languageTab = (val: SelectableLanguages) => {
+    return (
+      <a
+        href="#tab"
+        className={`${highlightSelectedLang(val)}`}
+        onClick={() => handleSelectLanguage(val)}
+        role="tab"
+        aria-controls={`${val}`}
+      >
+        {val}
+      </a>
+    );
+  };
+
+  const timerTab = (val: SelectableTimers) => {
+    return (
+      <a
+        href="#tab"
+        className={`${highlightSelectedTimer(val)}`}
+        onClick={() => handleSelectTimer(val)}
+        role="tab"
+        aria-controls={`${val}s`}
+      >
+        {val}s
+      </a>
+    );
+  };
+
   return (
     <section className="sample-text-section" title="sample-text-section">
       <div className="settings">
         <div className="lang-selection">
-          <a
-            href="#tab"
-            className={`${highlightSelectedLang("english")}`}
-            onClick={() => handleSelectLanguage("english")}
-            role="tab"
-            aria-controls="english"
-          >
-            English
-          </a>
-          <a
-            href="#tab"
-            className={`${highlightSelectedLang("french")}`}
-            onClick={() => handleSelectLanguage("french")}
-            role="tab"
-            aria-controls="french"
-          >
-            French
-          </a>
-          <a
-            href="#tab"
-            className={`${highlightSelectedLang("lorem")}`}
-            onClick={() => handleSelectLanguage("lorem")}
-            role="tab"
-            aria-controls="lorem"
-          >
-            Lorem
-          </a>
+          {languageTab("english")}
+          {languageTab("french")}
+          {languageTab("lorem")}
         </div>
         <div className="timer-selection">
-          <a
-            href="#tab"
-            className={`${highlightSelectedTimer(30)}`}
-            onClick={() => handleSelectTimer(30)}
-            role="tab"
-            aria-controls="30s"
-          >
-            30s
-          </a>
-          <a
-            href="#tab"
-            className={`${highlightSelectedTimer(60)}`}
-            onClick={() => handleSelectTimer(60)}
-            role="tab"
-            aria-controls="60s"
-          >
-            60s
-          </a>
-          <a
-            href="#tab"
-            className={`${highlightSelectedTimer(90)}`}
-            onClick={() => handleSelectTimer(90)}
-            role="tab"
-            aria-controls="90s"
-          >
-            90s
-          </a>
-          <a
-            href="#tab"
-            className={`${highlightSelectedTimer(120)}`}
-            onClick={() => handleSelectTimer(120)}
-            role="tab"
-            aria-controls="120s"
-          >
-            120s
-          </a>
+          {timerTab(30)}
+          {timerTab(60)}
+          {timerTab(90)}
+          {timerTab(120)}
         </div>
       </div>
       <div className="text-block">
