@@ -5,13 +5,21 @@ import { useEffect, useState } from "react";
 import Countdown from "./Countdown";
 
 export type TestStates = "waiting" | "running" | "completed";
+export type SelectableLanguages = "english" | "lorem" | "french";
 export type SelectableTimers = 30 | 60 | 90 | 120;
 
 function App() {
-  const [inputText, setInputText] = useState<string>("");
-  const [isTestInProgress, setIsTestInProgress] = useState<boolean>(false);
-  const [testState, setTestState] = useState<TestStates>("waiting");
+  const [selectedLang, setSelectedLang] =
+    useState<SelectableLanguages>("english");
   const [initialTimer, setInitialTimer] = useState<SelectableTimers>(30);
+  const [selectedTimer, setSelectedTimer] =
+    useState<SelectableTimers>(initialTimer);
+
+  const [testState, setTestState] = useState<TestStates>("waiting");
+  const [isTestInProgress, setIsTestInProgress] = useState<boolean>(false);
+
+  const [sampleText, setSampleText] = useState<string>("");
+  const [inputText, setInputText] = useState<string>("");
 
   let intervalId: ReturnType<typeof setInterval>;
 
@@ -28,6 +36,7 @@ function App() {
   };
 
   useEffect(() => {
+    // update testState to trigger timer start on keypress
     if (testState === "waiting" && inputText.length > 0) {
       setTestState("running");
     }
@@ -65,9 +74,14 @@ function App() {
           <div className="countdown-placeholder"></div>
         )}
         <SampleText
-          resetTest={resetTest}
-          initialTimer={initialTimer}
+          sampleText={sampleText}
+          setSampleText={setSampleText}
+          selectedLang={selectedLang}
+          setSelectedLang={setSelectedLang}
           setInitialTimer={setInitialTimer}
+          selectedTimer={selectedTimer}
+          setSelectedTimer={setSelectedTimer}
+          resetTest={resetTest}
         />
         <InputBox
           inputText={inputText}

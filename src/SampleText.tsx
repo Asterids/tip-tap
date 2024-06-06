@@ -1,23 +1,25 @@
-import { useEffect, useState } from "react";
-import { SelectableTimers } from "./App";
-
-type SelectableLanguages = "english" | "lorem" | "french";
+import { useEffect } from "react";
+import { SelectableLanguages, SelectableTimers } from "./App";
 
 export default function SampleText({
-  resetTest,
-  initialTimer,
+  sampleText,
+  setSampleText,
+  selectedLang,
+  setSelectedLang,
   setInitialTimer,
+  selectedTimer,
+  setSelectedTimer,
+  resetTest,
 }: {
-  resetTest: () => void;
-  initialTimer: SelectableTimers;
+  sampleText: string;
+  setSampleText: (str: string) => void;
+  selectedLang: SelectableLanguages;
+  setSelectedLang: (lang: SelectableLanguages) => void;
   setInitialTimer: (num: SelectableTimers) => void;
+  selectedTimer: SelectableTimers;
+  setSelectedTimer: (num: SelectableTimers) => void;
+  resetTest: () => void;
 }) {
-  const [selectedLang, setSelectedLang] =
-    useState<SelectableLanguages>("english");
-  const [selectedTimer, setSelectedTimer] =
-    useState<SelectableTimers>(initialTimer);
-  const [sampleText, setSampleText] = useState<string>("");
-
   const generateSampleText = (lang: SelectableLanguages = "english") => {
     // dummy text for now
     if (lang === "lorem") {
