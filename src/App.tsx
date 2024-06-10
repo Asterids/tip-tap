@@ -41,6 +41,29 @@ function App() {
     // diff the inputText against the sample text and update the UI to show correct and incorrect characters
   }, [inputText]);
 
+  const renderCountdown = () => {
+    if (testState === "running") {
+      return (
+        <Countdown
+          initialTimer={initialTimer}
+          // @ts-ignore
+          timeoutId={timeoutId}
+          finishTest={finishTest}
+        />
+      );
+    } else if (testState === "completed") {
+      return (
+        <div className="countdown">
+          <div className="countdown-box">
+            <p>0</p>
+          </div>
+        </div>
+      );
+    } else {
+      return <div className="countdown-placeholder"></div>;
+    }
+  };
+
   return (
     <div className="content">
       <header>
@@ -53,22 +76,7 @@ function App() {
       </header>
 
       <div>
-        {testState === "running" ? (
-          <Countdown
-            initialTimer={initialTimer}
-            // @ts-ignore
-            timeoutId={timeoutId}
-            finishTest={finishTest}
-          />
-        ) : testState === "completed" ? (
-          <div className="countdown">
-            <div className="countdown-box">
-              <p>0</p>
-            </div>
-          </div>
-        ) : (
-          <div className="countdown-placeholder"></div>
-        )}
+        {renderCountdown()}
         <SampleText
           sampleText={sampleText}
           setSampleText={setSampleText}
