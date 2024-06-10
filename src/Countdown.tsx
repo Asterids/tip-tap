@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 
 type CountdownProps = {
   initialTimer: number;
-  intervalId: ReturnType<typeof setInterval>;
+  timeoutId: ReturnType<typeof setTimeout>;
   finishTest: () => void;
 };
 
 export default function Countdown({
   initialTimer,
-  intervalId,
+  timeoutId,
   finishTest,
 }: CountdownProps) {
   const [secondsRemaining, setSecondsRemaining] = useState(initialTimer);
@@ -16,20 +16,22 @@ export default function Countdown({
   useEffect(() => {
     if (!secondsRemaining) return;
 
-    intervalId = setInterval(() => {
-      if (secondsRemaining > 0) {
-        setSecondsRemaining(secondsRemaining - 1);
-      } else {
+    timeoutId = setTimeout(() => {
+      if (secondsRemaining - 1 === 0) {
         finishTest();
       }
+
+      setSecondsRemaining(secondsRemaining - 1);
     }, 1000);
 
-    return () => clearInterval(intervalId);
+    return () => clearTimeout(timeoutId);
   }, [secondsRemaining]);
 
   return (
     <div className="countdown">
-      <p>{secondsRemaining}</p>
+      <div className="countdown-box">
+        <p>{secondsRemaining}</p>
+      </div>
     </div>
   );
 }

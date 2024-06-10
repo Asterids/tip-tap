@@ -16,23 +16,21 @@ function App() {
     useState<SelectableTimers>(initialTimer);
 
   const [testState, setTestState] = useState<TestStates>("waiting");
-  const [isTestInProgress, setIsTestInProgress] = useState<boolean>(false);
 
   const [sampleText, setSampleText] = useState<string>("");
   const [inputText, setInputText] = useState<string>("");
 
-  let intervalId: ReturnType<typeof setInterval>;
+  let timeoutId: ReturnType<typeof setTimeout>;
 
   const finishTest = () => {
-    clearInterval(intervalId);
+    clearTimeout(timeoutId);
     setTestState("completed");
   };
 
   const resetTest = () => {
     setInputText("");
-    setIsTestInProgress(false);
     setTestState("waiting");
-    clearInterval(intervalId);
+    clearTimeout(timeoutId);
   };
 
   useEffect(() => {
@@ -42,14 +40,6 @@ function App() {
     }
     // diff the inputText against the sample text and update the UI to show correct and incorrect characters
   }, [inputText]);
-
-  useEffect(() => {
-    if (testState === "running") {
-      setIsTestInProgress(true);
-    } else {
-      setIsTestInProgress(false);
-    }
-  }, [testState]);
 
   return (
     <div className="content">
@@ -63,13 +53,19 @@ function App() {
       </header>
 
       <div>
-        {isTestInProgress ? (
+        {testState === "running" ? (
           <Countdown
             initialTimer={initialTimer}
             // @ts-ignore
-            intervalId={intervalId}
+            timeoutId={timeoutId}
             finishTest={finishTest}
           />
+        ) : testState === "completed" ? (
+          <div className="countdown">
+            <div className="countdown-box">
+              <p>0</p>
+            </div>
+          </div>
         ) : (
           <div className="countdown-placeholder"></div>
         )}
@@ -85,7 +81,7 @@ function App() {
         />
         <InputBox
           inputText={inputText}
-          isTestInProgress={isTestInProgress}
+          testState={testState}
           handleKeypress={(e) => setInputText(e.target.value)}
           resetTest={resetTest}
         />

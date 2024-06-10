@@ -1,15 +1,16 @@
 import { ChangeEvent } from "react";
+import { TestStates } from "./App";
 
 type InputBoxProps = {
   inputText: string;
-  isTestInProgress: boolean;
+  testState: TestStates;
   handleKeypress: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   resetTest: () => void;
 };
 
 export default function InputBox({
   inputText,
-  isTestInProgress,
+  testState,
   handleKeypress,
   resetTest,
 }: InputBoxProps) {
@@ -18,7 +19,7 @@ export default function InputBox({
       <form className="input-box">
         <div className="input-box-header">
           <label htmlFor="type-here">Type to begin:</label>
-          {isTestInProgress && (
+          {(testState === "running" || testState === "completed") && (
             <button id="reset" onClick={resetTest}>
               Reset
             </button>
