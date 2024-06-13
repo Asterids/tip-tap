@@ -34,7 +34,7 @@ export default function SampleText({
       );
     } else {
       setSampleText(
-        "Sample text here. Sentences of words, the quick brown fox jumped over the lazy dog. Lorem ipsum dolor sit amet."
+        "Sample text here. Sentences of words, the quick brown fox jumps over the lazy dog. Lorem ipsum dolor sit amet."
       );
     }
   };

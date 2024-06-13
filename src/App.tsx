@@ -20,10 +20,27 @@ function App() {
   const [sampleText, setSampleText] = useState<string>("");
   const [inputText, setInputText] = useState<string>("");
   const [isCorrectAtIndex, setIsCorrectAtIndex] = useState<string[]>([]);
+  const [overallErrorsCount, setOverallErrorsCount] = useState<number>(0);
+
+  const [wpm, setWpm] = useState<number>(0);
+  const [accuracy, setAccuracy] = useState<number>(0);
 
   let timeoutId: ReturnType<typeof setTimeout>;
 
   const finishTest = () => {
+    const words = inputText.length / 5;
+    const errorsAtEnd = isCorrectAtIndex.filter(
+      (el) => el === "incorrect"
+    ).length;
+
+    const wpmGross = words / (initialTimer / 60);
+    const wpmNet = wpmGross - errorsAtEnd / (initialTimer / 60);
+    setWpm(wpmNet);
+
+    const correctCount = inputText.length - overallErrorsCount;
+    const acc = correctCount / inputText.length;
+    setAccuracy(acc);
+
     clearTimeout(timeoutId);
     setTestState("completed");
   };
@@ -45,6 +62,8 @@ function App() {
       const cursorPosition = inputText.length - 1;
       const typedChar = inputText[cursorPosition];
 
+      // TODO: correctness eval based on array is slightly off, brittle;
+      // also need to account for moving cursor around manually w/arrow keys, mouse, etc.
       const typedCharsAccountingForBackspace = isCorrectAtIndex.slice(
         0,
         cursorPosition
@@ -53,6 +72,7 @@ function App() {
       if (typedChar === sampleText[cursorPosition]) {
         setIsCorrectAtIndex([...typedCharsAccountingForBackspace, "correct"]);
       } else {
+        setOverallErrorsCount(overallErrorsCount + 1);
         setIsCorrectAtIndex([...typedCharsAccountingForBackspace, "incorrect"]);
       }
     } else {
@@ -73,6 +93,10 @@ function App() {
     } else if (testState === "completed") {
       return (
         <div className="countdown">
+          <div>
+            <p>WPM: {`${wpm}`}</p>
+            <p>Accuracy: {`${accuracy}`}</p>
+          </div>
           <div className="countdown-box">
             <p>0</p>
           </div>
