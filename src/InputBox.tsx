@@ -31,6 +31,7 @@ export default function InputBox({
           cols={19}
           value={inputText}
           onChange={handleKeypress}
+          disabled={testState === "completed"}
         />
       </form>
     </section>
