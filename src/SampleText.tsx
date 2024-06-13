@@ -9,6 +9,7 @@ export default function SampleText({
   setInitialTimer,
   selectedTimer,
   setSelectedTimer,
+  isCorrectAtIndex,
   resetTest,
 }: {
   sampleText: string;
@@ -18,6 +19,7 @@ export default function SampleText({
   setInitialTimer: (num: SelectableTimers) => void;
   selectedTimer: SelectableTimers;
   setSelectedTimer: (num: SelectableTimers) => void;
+  isCorrectAtIndex: string[];
   resetTest: () => void;
 }) {
   const generateSampleText = (lang: SelectableLanguages = "english") => {
@@ -105,7 +107,13 @@ export default function SampleText({
         </div>
       </div>
       <div className="text-block">
-        <p>{sampleText}</p>
+        <p>
+          {sampleText.split("").map((char, idx) => (
+            <span key={idx} className={`${isCorrectAtIndex[idx]}`}>
+              {char}
+            </span>
+          ))}
+        </p>
       </div>
     </section>
   );

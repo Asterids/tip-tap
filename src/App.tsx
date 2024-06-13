@@ -19,6 +19,7 @@ function App() {
 
   const [sampleText, setSampleText] = useState<string>("");
   const [inputText, setInputText] = useState<string>("");
+  const [isCorrectAtIndex, setIsCorrectAtIndex] = useState<string[]>([]);
 
   let timeoutId: ReturnType<typeof setTimeout>;
 
@@ -29,16 +30,34 @@ function App() {
 
   const resetTest = () => {
     setInputText("");
+    setIsCorrectAtIndex([]);
     setTestState("waiting");
     clearTimeout(timeoutId);
   };
 
   useEffect(() => {
-    // update testState to trigger timer start on keypress
-    if (testState === "waiting" && inputText.length > 0) {
-      setTestState("running");
+    if (inputText.length) {
+      // update testState to trigger timer start on keypress
+      if (testState === "waiting") {
+        setTestState("running");
+      }
+      // diff the inputText against the sample text and update the UI to show correct and incorrect characters
+      const cursorPosition = inputText.length - 1;
+      const typedChar = inputText[cursorPosition];
+
+      const typedCharsAccountingForBackspace = isCorrectAtIndex.slice(
+        0,
+        cursorPosition
+      );
+
+      if (typedChar === sampleText[cursorPosition]) {
+        setIsCorrectAtIndex([...typedCharsAccountingForBackspace, "correct"]);
+      } else {
+        setIsCorrectAtIndex([...typedCharsAccountingForBackspace, "incorrect"]);
+      }
+    } else {
+      setIsCorrectAtIndex([]);
     }
-    // diff the inputText against the sample text and update the UI to show correct and incorrect characters
   }, [inputText]);
 
   const renderCountdown = () => {
@@ -85,6 +104,7 @@ function App() {
           setInitialTimer={setInitialTimer}
           selectedTimer={selectedTimer}
           setSelectedTimer={setSelectedTimer}
+          isCorrectAtIndex={isCorrectAtIndex}
           resetTest={resetTest}
         />
         <InputBox
