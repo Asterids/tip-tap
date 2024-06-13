@@ -27,6 +27,7 @@ export default function Countdown({
     return () => clearTimeout(timeoutId);
   }, [secondsRemaining]);
 
+  // TODO: Label timer with "Time left" or similar
   return (
     <div className="countdown">
       <div className="countdown-box">

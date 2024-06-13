@@ -1,24 +1,26 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, KeyboardEvent } from "react";
 import { TestStates } from "./App";
 
 type InputBoxProps = {
   inputText: string;
   testState: TestStates;
-  handleKeypress: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  handleChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  handleOnKeyUp: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
   resetTest: () => void;
 };
 
 export default function InputBox({
   inputText,
   testState,
-  handleKeypress,
+  handleChange,
+  handleOnKeyUp,
   resetTest,
 }: InputBoxProps) {
   return (
     <section className="input-section" title="input-section">
       <form className="input-box">
         <div className="input-box-header">
-          <label htmlFor="type-here">Type to begin:</label>
+          <label htmlFor="typing-textarea">Type to begin:</label>
           {(testState === "running" || testState === "completed") && (
             <button id="reset" onClick={resetTest}>
               Reset
@@ -26,11 +28,12 @@ export default function InputBox({
           )}
         </div>
         <textarea
-          id="type-here"
+          id="typing-textarea"
           rows={10}
           cols={19}
           value={inputText}
-          onChange={handleKeypress}
+          onChange={handleChange}
+          onKeyUp={handleOnKeyUp}
           disabled={testState === "completed"}
         />
       </form>

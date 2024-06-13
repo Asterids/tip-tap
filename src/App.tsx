@@ -1,7 +1,7 @@
 import "./App.css";
 import SampleText from "./SampleText";
 import InputBox from "./InputBox";
-import { useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import Countdown from "./Countdown";
 
 export type TestStates = "waiting" | "running" | "completed";
@@ -19,8 +19,12 @@ function App() {
 
   const [sampleText, setSampleText] = useState<string>("");
   const [inputText, setInputText] = useState<string>("");
+  const [cursorPosition, setCursorPosition] = useState<number>(0);
+  const [keyPressed, setKeyPressed] = useState<string | null>(null);
+
   const [isCorrectAtIndex, setIsCorrectAtIndex] = useState<string[]>([]);
   const [overallErrorsCount, setOverallErrorsCount] = useState<number>(0);
+  const [errorsAtEnd, setErrorsAtEnd] = useState<number>(0);
 
   const [wpm, setWpm] = useState<number>(0);
   const [accuracy, setAccuracy] = useState<number>(0);
@@ -29,16 +33,14 @@ function App() {
 
   const finishTest = () => {
     const words = inputText.length / 5;
-    const errorsAtEnd = isCorrectAtIndex.filter(
-      (el) => el === "incorrect"
-    ).length;
+    setErrorsAtEnd(isCorrectAtIndex.filter((el) => el === "incorrect").length);
 
     const wpmGross = words / (initialTimer / 60);
-    const wpmNet = wpmGross - errorsAtEnd / (initialTimer / 60);
+    const wpmNet = Math.round(wpmGross - errorsAtEnd / (initialTimer / 60));
     setWpm(wpmNet);
 
     const correctCount = inputText.length - overallErrorsCount;
-    const acc = correctCount / inputText.length;
+    const acc = Math.round((correctCount / inputText.length) * 100);
     setAccuracy(acc);
 
     clearTimeout(timeoutId);
@@ -52,28 +54,48 @@ function App() {
     clearTimeout(timeoutId);
   };
 
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setInputText(e.currentTarget.value);
+    setCursorPosition(e.currentTarget.selectionStart);
+  };
+
+  const handleOnKeyUp = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    setKeyPressed(e.key);
+  };
+
   useEffect(() => {
     if (inputText.length) {
-      // update testState to trigger timer start on keypress
+      // update testState to trigger timer start when user begins typing in the field
       if (testState === "waiting") {
         setTestState("running");
       }
-      // diff the inputText against the sample text and update the UI to show correct and incorrect characters
-      const cursorPosition = inputText.length - 1;
-      const typedChar = inputText[cursorPosition];
 
-      // TODO: correctness eval based on array is slightly off, brittle;
-      // also need to account for moving cursor around manually w/arrow keys, mouse, etc.
-      const typedCharsAccountingForBackspace = isCorrectAtIndex.slice(
-        0,
-        cursorPosition
-      );
+      const idxBeforeCursor = cursorPosition - 1;
+      const typedChar = inputText[idxBeforeCursor];
 
-      if (typedChar === sampleText[cursorPosition]) {
-        setIsCorrectAtIndex([...typedCharsAccountingForBackspace, "correct"]);
+      // if cursor got moved inside text or backspace pressed, recalculate entire correctness array.
+      // else, diff the typedChar against the sample text and update the correctness array
+      if (cursorPosition !== inputText.length || keyPressed === "Backspace") {
+        let newCorrectnessArray: string[] = [];
+        for (let i = 0; i < inputText.length; i++) {
+          if (inputText[i] === sampleText[i]) {
+            newCorrectnessArray.push("correct");
+          } else {
+            newCorrectnessArray.push("incorrect");
+          }
+        }
+        setIsCorrectAtIndex([...newCorrectnessArray]);
+      } else if (typedChar === sampleText[idxBeforeCursor]) {
+        setIsCorrectAtIndex([
+          ...isCorrectAtIndex.slice(0, cursorPosition),
+          "correct",
+        ]);
       } else {
         setOverallErrorsCount(overallErrorsCount + 1);
-        setIsCorrectAtIndex([...typedCharsAccountingForBackspace, "incorrect"]);
+        setIsCorrectAtIndex([
+          ...isCorrectAtIndex.slice(0, cursorPosition),
+          "incorrect",
+        ]);
       }
     } else {
       setIsCorrectAtIndex([]);
@@ -91,11 +113,14 @@ function App() {
         />
       );
     } else if (testState === "completed") {
+      // TODO: clean up how the stats display at the end
       return (
         <div className="countdown">
           <div>
             <p>WPM: {`${wpm}`}</p>
-            <p>Accuracy: {`${accuracy}`}</p>
+            <p>Accuracy: {`${accuracy}%`}</p>
+            <p>Errors at finish: {`${errorsAtEnd}`}</p>
+            <p>Overall errors made: {`${overallErrorsCount}`}</p>
           </div>
           <div className="countdown-box">
             <p>0</p>
@@ -134,7 +159,8 @@ function App() {
         <InputBox
           inputText={inputText}
           testState={testState}
-          handleKeypress={(e) => setInputText(e.target.value)}
+          handleChange={handleChange}
+          handleOnKeyUp={handleOnKeyUp}
           resetTest={resetTest}
         />
       </div>

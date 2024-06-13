@@ -22,6 +22,7 @@ export default function SampleText({
   isCorrectAtIndex: string[];
   resetTest: () => void;
 }) {
+  // TODO: Generate actual sample text
   const generateSampleText = (lang: SelectableLanguages = "english") => {
     // dummy text for now
     if (lang === "lorem") {
@@ -34,7 +35,7 @@ export default function SampleText({
       );
     } else {
       setSampleText(
-        "Sample text here. Sentences of words, the quick brown fox jumps over the lazy dog. Lorem ipsum dolor sit amet."
+        "The only people for me are the mad ones, the ones who are mad to live, mad to talk, mad to be saved, desirous of everything at the same time, the ones who never yawn or say a commonplace thing, but burn, burn, burn like fabulous yellow roman candles exploding like spiders across the stars."
       );
     }
   };
@@ -91,6 +92,7 @@ export default function SampleText({
     );
   };
 
+  // TODO: Have sample text advance/scroll down as typing progresses
   return (
     <section className="sample-text-section" title="sample-text-section">
       <div className="settings">
