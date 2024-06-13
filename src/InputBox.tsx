@@ -35,6 +35,7 @@ export default function InputBox({
           onChange={handleChange}
           onKeyUp={handleOnKeyUp}
           disabled={testState === "completed"}
+          className={testState === "completed" ? "inactivated" : ""}
         />
       </form>
     </section>

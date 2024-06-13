@@ -69,7 +69,31 @@ hr {
   border-radius: 5px;
 }
 
-.countdown p {
+.results-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  align-items: center;
+  background-color: #eee;
+  border: 2px solid #183642;
+  border-radius: 5px;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.results {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 16px;
+}
+
+.alert {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.countdown-box p {
   padding: 8px 12px;
   color: darkgreen;
   font-weight: bold;
@@ -116,7 +140,7 @@ hr {
 .text-block {
   display: flex;
   width: 100%;
-  height: 215px;
+  height: 190px;
   border-radius: 4px;
   background-color: #fefbf3;
 }
@@ -185,6 +209,10 @@ textarea {
   line-height: 1.55;
   background-color: #fff;
   color: #000;
+}
+
+.inactivated {
+  opacity: 0.4;
 }
 
 button {

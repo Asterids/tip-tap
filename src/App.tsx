@@ -32,9 +32,11 @@ function App() {
   let timeoutId: ReturnType<typeof setTimeout>;
 
   const finishTest = () => {
+    // TODO: also show cpm? raw characters per minute not accounting for mistakes
     const words = inputText.length / 5;
     setErrorsAtEnd(isCorrectAtIndex.filter((el) => el === "incorrect").length);
 
+    // TODO: Show 2 wpm calcs as determined both by space-separated words and also averaging 5 characters per word?
     const wpmGross = words / (initialTimer / 60);
     const wpmNet = Math.round(wpmGross - errorsAtEnd / (initialTimer / 60));
     setWpm(wpmNet);
@@ -51,6 +53,7 @@ function App() {
     setInputText("");
     setIsCorrectAtIndex([]);
     setTestState("waiting");
+    setOverallErrorsCount(0);
     clearTimeout(timeoutId);
   };
 
@@ -113,17 +116,21 @@ function App() {
         />
       );
     } else if (testState === "completed") {
-      // TODO: clean up how the stats display at the end
+      // TODO: improve the stats display, weirdness in bumping the main content down
       return (
         <div className="countdown">
-          <div>
-            <p>WPM: {`${wpm}`}</p>
-            <p>Accuracy: {`${accuracy}%`}</p>
-            <p>Errors at finish: {`${errorsAtEnd}`}</p>
-            <p>Overall errors made: {`${overallErrorsCount}`}</p>
-          </div>
-          <div className="countdown-box">
-            <p>0</p>
+          <div className="results-container">
+            <p className="alert">Time's up!</p>
+            <div className="results">
+              <div>
+                <p>WPM: {`${wpm}`}</p>
+                <p>Accuracy: {`${accuracy}%`}</p>
+              </div>
+              <div>
+                <p>Errors at finish: {`${errorsAtEnd}`}</p>
+                <p>Overall errors made: {`${overallErrorsCount}`}</p>
+              </div>
+            </div>
           </div>
         </div>
       );
